@@ -5,6 +5,13 @@ from prep_terrain_data import makeTerrainData
 from class_vis import prettyPicture
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import NearestNeighbors
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import make_classification
+from sklearn.ensemble import RandomForestClassifier
+
+#%%
 
 features_train, labels_train, features_test, labels_test = makeTerrainData()
 
@@ -34,14 +41,51 @@ plt.show()
 ### visualization code (prettyPicture) to show you the decision boundary
 
 # Nearest neighbours
-from sklearn.neighbors import NearestNeighbors
 
 
 
-clf = KNeighborsClassifier(n_neighbors=3)
-clf.fit(X, y) 
-KNeighborsClassifier(...)
+clf = KNeighborsClassifier(n_neighbors=1)
+clf.fit(features_train, labels_train) 
 
+predict = clf.predict(features_test)
+accuracy = accuracy_score(predict, labels_test)
+print("Accuracy K-nearest means classifier: ", accuracy)
+
+try:
+    prettyPicture(clf, features_test, labels_test)
+except NameError:
+    print("NameError")
+    pass
+
+
+#%%
+
+
+
+clf = AdaBoostClassifier(n_estimators=15, random_state=0)
+clf.fit(features_train, labels_train)  
+
+predict = clf.predict(features_test)
+accuracy = accuracy_score(predict, labels_test)
+print("Accuracy Adaboost classifier: ", accuracy)
+
+
+try:
+    prettyPicture(clf, features_test, labels_test)
+except NameError:
+    print("NameError")
+    pass
+
+
+
+
+#%%
+    
+clf = RandomForestClassifier(n_estimators=1000, max_depth=3,random_state=0)
+clf.fit(features_train, labels_train)
+predict = clf.predict(features_test)
+accuracy = accuracy_score(predict, labels_test)
+print("Accuracy Adaboost classifier: ", accuracy)
 
 
 try:
